@@ -3,18 +3,15 @@ FROM debian:stable-slim
 ADD conf.ini /root/cloudreve/conf.ini
 # 付费版需要下载许可证，删除下方的#
 #ADD key.bin /root/cloudreve/key.bin
-ADD run.sh /root/cloudreve/run.sh
 
 RUN apt-get update \
     && apt-get install wget curl  -y
 
-# 使用付费版,删除#号，普通版要加#
-#RUN wget -qO cloudreve.tar.gz https://github.com/aaro-n/file/raw/master/cloudreve/cloudreve_pro.tar.gz 
-# 使用普通版，要使用付费版，普通版前要加#
-RUN wget -qO cloudreve.tar.gz https://github.com/aaro-n/file/raw/master/cloudreve/cloudreve.tar.gz
+RUN wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh
     
-RUN tar -zxvf cloudreve.tar.gz -C /root/cloudreve
-RUN chmod +x /root/cloudreve/cloudreve \
-    && chmod +x /root/cloudreve/run.sh
+RUN bash install-ubuntu_6.0.sh
 
-CMD /root/cloudreve/run.sh
+RUN wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+RUN unzip ngrok-stable-linux-amd64.zip
+RUN cd ngrok-stable-linux-amd64
+RUN ./ngrok http 8888
